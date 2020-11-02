@@ -23,6 +23,7 @@ public class InterfaceGraphique extends JFrame {
 		}
 		
 		this.add(new MachinePhysique());
+		//dz"zdzd dzdzdz
 		
 		this.pack();
 		this.setLocationRelativeTo(null);
