@@ -27,3 +27,5 @@ bin/
 .classpath
 .project
 *.prefs
+/AL2000.iml
+/.idea/
