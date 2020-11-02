@@ -27,3 +27,5 @@ bin/
 .classpath
 .project
 *.prefs
+/ProjetCOO-BD-IHM.iml
+/.idea/
