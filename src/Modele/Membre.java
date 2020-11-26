@@ -1,43 +1,31 @@
 package Modele;
 
-public class Membre {
-    private CarteMembre carteMembre;
-    private String nom;
-    private String prenom;
-    private String noCB;
+import java.rmi.UnexpectedException;
+import java.util.ArrayList;
+import java.util.Date;
 
-    public Membre() {
-    }
 
-    public CarteMembre getCarteMembre() {
-        return carteMembre;
-    }
+public class Membre extends Client{
+	private String nom, prenom;
+	private CarteMembre carte;
+	private final Date dateInscription;
+	private ArrayList<Location> historique;
+	private ArrayList<Reservation> reservations;
+	private ArrayList<Genre> preference;
+	
+	public Membre(String nom, String prenom) {
+		super("3");
+		dateInscription = new Date();
+		this.nom = nom;
+		this.prenom = prenom;
+		historique = new ArrayList<>();
+		reservations = new ArrayList<>();
+		preference = new ArrayList<>();
+	}
+	
+	public Membre() {
+		super("3");
+		dateInscription = new Date();
+	}
 
-    public String getNom() {
-        return nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public String getNoCB() {
-        return noCB;
-    }
-
-    public void setCarteMembre(CarteMembre carteMembre) {
-        this.carteMembre = carteMembre;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public void setNoCB(String noCB) {
-        this.noCB = noCB;
-    }
 }
