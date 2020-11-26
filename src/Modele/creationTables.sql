@@ -3,7 +3,7 @@ drop table LesReservations FORCE;
 drop table LesDVDs FORCE;
 drop table LeCatalogue FORCE;
 drop table LesClientsA FORCE;
-drop table LesPersonnes FORCE;
+drop table LesPersonnesA FORCE;
 drop type ens_locations FORCE;
 drop type ens_reservations FORCE;
 drop type tlocation;
@@ -24,7 +24,7 @@ create type tpersonne as object (
 );
 /
 
-create table LesPersonnes of tpersonne;
+create table LesPersonnesA of tpersonne;
 
 -- Definition d'une collection libre de reference sur tpersonne
 -- Acteurs : table de personnes
@@ -52,6 +52,7 @@ create type tfilm as object (
 -- Definition du type tdvd
 -- tdvd est un objet pointant sur l'objet physique (donc meme apres location il n'est pas retire de le base)
 create type tdvd as object (
+    codeBarre number(12),
     film REF tfilm,
     estDispo number(1),
     estReserve number(1)
@@ -94,7 +95,7 @@ create table LesClientsA of tclient;
 
 -- Creation de la location
 create type tlocation as object (
-    film REF tfilm,
+    dvd REF tdvd,
     dateLoc date,
     dateRet date
 );
@@ -134,3 +135,4 @@ create table LesReservations (
     liste_reservation ens_reservations
 )
 Nested table liste_reservation Store As ListeReservationsMembre;
+
