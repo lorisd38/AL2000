@@ -145,7 +145,7 @@ INSERT INTO LesPersonnesA values ('J','cameron');
 
 INSERT INTO LeCatalogue values
 ('bonjour',(select REF(p) from LesPersonnesA p
-            where p.nom = 'bob'),(select REF(p) from LesPersonnesA p
+            where p.nom = 'georges'),(select REF(p) from LesPersonnesA p
                                   where p.nom = 'bon'),
  '16-05-1963',tacteurs((select REF(p) from LesPersonnesA p
                         where p.nom = 'steven')),'c est la merde','qgqgqrfhgqfhqhf',
@@ -153,18 +153,27 @@ INSERT INTO LeCatalogue values
 
 INSERT INTO LeCatalogue values
 ('bonjour2',(select REF(p) from LesPersonnesA p
-            where p.nom = 'bob'),(select REF(p) from LesPersonnesA p
-                                  where p.nom = 'bon'),
+            where p.nom = 'bon'),(select REF(p) from LesPersonnesA p
+                                  where p.nom = 'georges'),
  '16-05-1963',tacteurs((select REF(p) from LesPersonnesA p
-                        where p.nom = 'steven')),'c est la merde','qgqgqrfhgqfhqhf',
+                        where p.nom = 'bon')),'c est la merde','qgqgqrfhgqfhqhf',
  tgenres('action', 'thriller'));
 
 INSERT INTO LeCatalogue values
 ('bonjour3',(select REF(p) from LesPersonnesA p
             where p.nom = 'bob'),(select REF(p) from LesPersonnesA p
-                                  where p.nom = 'bon'),
+                                  where p.nom = 'J'),
  '16-05-1963',tacteurs((select REF(p) from LesPersonnesA p
-                        where p.nom = 'steven')),'c est la merde','qgqgqrfhgqfhqhf',
+                        where p.nom = 'georges')),'c est la merde','qgqgqrfhgqfhqhf',
+ tgenres('horror', 'romance'));
+
+INSERT INTO LeCatalogue values
+('bonjour5',(select REF(p) from LesPersonnesA p
+             where p.nom = 'bob'),(select REF(p) from LesPersonnesA p
+                                   where p.nom = 'bon'),
+ '16-05-1963',tacteurs((select REF(p) from LesPersonnesA p
+                        where p.nom = 'steven'),(select REF(p) from LesPersonnesA p
+                                                 where p.nom = 'J')),'c est la merde','qgqgqrfhgqfhqhf',
  tgenres('horror', 'romance'));
 
 INSERT INTO LesDVDs VALUES (1234,(select REF(f) from LeCatalogue f where f.titre = 'bonjour'),1,0);
