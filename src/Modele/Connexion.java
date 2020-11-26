@@ -4,8 +4,8 @@ import java.sql.*;
 
 public class Connexion {
     private final static String URL = "jdbc:oracle:thin:@im2ag-oracle.e.ujf-grenoble.fr:1521:im2ag";
-    private final static String USER = "";
-    private final static String PASSWD = "";
+    private final static String USER = "himc";
+    private final static String PASSWD = "Clapclap31";
     private static Connection connect;
 
     private Connexion() throws SQLException {
@@ -35,6 +35,10 @@ public class Connexion {
 
     public Statement createStatement() throws ClassNotFoundException, SQLException {
         return connect.createStatement();
+    }
+
+    public void close() throws SQLException {
+        connect.close();
     }
 
 }

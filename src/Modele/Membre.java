@@ -1,7 +1,7 @@
 package Modele;
 
 public class Membre {
-    private String idCarteMembre;
+    private CarteMembre carteMembre;
     private String nom;
     private String prenom;
     private String noCB;
@@ -9,15 +9,8 @@ public class Membre {
     public Membre() {
     }
 
-    public Membre(String idCarteMembre, String nom, String prenom, String noCB) {
-        this.idCarteMembre = idCarteMembre;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.noCB = noCB;
-    }
-
-    public String getIdCarteMembre() {
-        return idCarteMembre;
+    public CarteMembre getCarteMembre() {
+        return carteMembre;
     }
 
     public String getNom() {
@@ -32,8 +25,8 @@ public class Membre {
         return noCB;
     }
 
-    public void setIdCarteMembre(String idCarteMembre) {
-        this.idCarteMembre = idCarteMembre;
+    public void setCarteMembre(CarteMembre carteMembre) {
+        this.carteMembre = carteMembre;
     }
 
     public void setNom(String nom) {
