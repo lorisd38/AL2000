@@ -9,7 +9,7 @@ public class DvdDAO extends SqlDAO<DVD> {
     }
 
     @Override
-    public DVD read(int id) {
+    public DVD read(Object titre) {
         return null;
     }
 

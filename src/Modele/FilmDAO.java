@@ -7,8 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 public class FilmDAO extends SqlDAO<Film> {
@@ -18,10 +20,10 @@ public class FilmDAO extends SqlDAO<Film> {
     }
 
     @Override
-    public Film read(int id) {
+    public Film read(Object titre) {
         Film film = new Film();
         try{
-            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre, DEREF(producteur) as prod ,DEREF(realisateur) as rea, DEREF(acteursTab) as acts, date_de_sortie, resume, affiche_url, genres FROM (SELECT f.*, value(act) AS acteursTab from LeCatalogue f, table(f.acteurs) act)");
+            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre, DEREF(producteur) as prod ,DEREF(realisateur) as rea, DEREF(acteursTab) as acts, date_de_sortie, resume, affiche_url, genres, ageLimite FROM (SELECT f.*, value(act) AS acteursTab from LeCatalogue f, table(f.acteurs) act) where titre = '" + titre.toString() + "'");
 
             while(result.next()){
                 if(result.getObject(1) != null){
@@ -51,13 +53,66 @@ public class FilmDAO extends SqlDAO<Film> {
                 if(result.getObject("acts") != null){
                     Object[] att;
                     att = ((STRUCT) result.getObject("acts")).getAttributes();
+                    ArrayList<Personne> acteurs = new ArrayList<Personne>();
+                    int i = 0;
+                    String nom = "";
                     for (Object o : att) {
-                        System.out.println(o.getClass());
-                        System.out.println(o.toString());
+                        if(i%2 == 0){
+                            nom = o.toString();
+                        } else {
+                            Personne p = new Personne(nom, o.toString());
+                            acteurs.add(p);
+                        }
+                        i++;
                     }
+                    film.setActeurs(acteurs);
                 }
+
+                if(result.getObject("date_de_sortie") != null){
+                    DateFormat format = new SimpleDateFormat("DD-MM-YYYY", Locale.FRANCE);
+                    Date date = (Date) format.parse(result.getObject("date_de_sortie").toString());
+                    film.setDateDeSortie(date);
+                }
+
+                if(result.getObject("resume") != null){
+                    film.setResume(result.getObject("resume").toString());
+                } else {
+                    film.setResume("Pas de résumé");
+                }
+
+                if(result.getObject("affiche_url") != null){
+                    film.setAffiche(result.getObject("affiche_url").toString());
+                } else {
+                    film.setAffiche("Pas d'affiche");
+                }
+
+                if(result.getObject("genres") != null) {
+                    Object[] att;
+                    att = ((STRUCT) result.getObject("genres")).getAttributes();
+                    ArrayList<Genre> genres = new ArrayList<Genre>();
+                    for (Object o : att) {
+                        switch(o.toString()){
+                            case "Action" :
+                                genres.add(Genre.Action);
+                                break;
+                            case "Thriller" :
+                                genres.add(Genre.Thriller);
+                                break;
+                            case "Documentaire" :
+                                genres.add(Genre.Documentaire);
+                        }
+                    }
+                    film.setGenre(genres);
+                }
+
+                if(result.getObject("ageLimite") != null){
+                    film.setAgeLimite((int)result.getObject("ageLimite"));
+                } else {
+                    film.setAgeLimite(0);
+                }
+
             }
-        } catch(SQLException | ClassNotFoundException e) {
+        } catch(SQLException | ClassNotFoundException | ParseException e) {
             e.printStackTrace();
         }
         return film;
@@ -65,7 +120,7 @@ public class FilmDAO extends SqlDAO<Film> {
 
     @Override
     public boolean create(Film obj) {
-        String query = "INSERT INTO LeCatalogue values (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO LeCatalogue values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement preparedStmt;
         try {
             preparedStmt = connection.prepareStatement(query);
@@ -85,8 +140,9 @@ public class FilmDAO extends SqlDAO<Film> {
                 }
             }
             preparedStmt.setString (5, "tacteurs(" + acteurs + ")");
-            preparedStmt.setString (6, obj.getResume());
-            preparedStmt.setString (7, obj.getAffiche());
+            preparedStmt.setString (6, Integer.toString(obj.getAgeLimite()));
+            preparedStmt.setString (7, obj.getResume());
+            preparedStmt.setString (8, obj.getAffiche());
             String genres = "";
             for(int i = 0 ; i < obj.getGenre().size(); i++){
                 if(i < obj.getGenre().size()-1) {
@@ -95,7 +151,7 @@ public class FilmDAO extends SqlDAO<Film> {
                     acteurs += "'" + obj.getGenre().get(i) + "'";
                 }
             }
-            preparedStmt.setString (8, "tgenres(" + genres + ")");
+            preparedStmt.setString (9, "tgenres(" + genres + ")");
             preparedStmt.execute();
             return true;
         } catch (ClassNotFoundException e) {
@@ -113,6 +169,17 @@ public class FilmDAO extends SqlDAO<Film> {
 
     @Override
     public boolean delete(Film obj) {
-        return false;
+        int nbMaJ = 0;
+        String requete = "DELETE FROM LeCatalogue WHERE titre = '" + obj.getNom() + "'";
+
+        try {
+            // Execution de la requete
+            PreparedStatement preparedStatement = this.connection.prepareStatement(requete);
+            nbMaJ = preparedStatement.executeUpdate();
+        } catch(SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return nbMaJ != 0;
     }
 }
