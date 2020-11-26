@@ -1,31 +1,34 @@
 package Modele;
 
-import java.rmi.UnexpectedException;
-import java.util.ArrayList;
-import java.util.Date;
-
-
 public class Membre extends Client{
-	private String nom, prenom;
-	private CarteMembre carte;
-	private final Date dateInscription;
-	private ArrayList<Location> historique;
-	private ArrayList<Reservation> reservations;
-	private ArrayList<Genre> preference;
-	
-	public Membre(String nom, String prenom) {
-		super("3");
-		dateInscription = new Date();
-		this.nom = nom;
-		this.prenom = prenom;
-		historique = new ArrayList<>();
-		reservations = new ArrayList<>();
-		preference = new ArrayList<>();
-	}
-	
-	public Membre() {
-		super("3");
-		dateInscription = new Date();
-	}
+    private CarteMembre carteMembre;
+    private String nom;
+    private String prenom;
 
+    public Membre() {
+    }
+
+    public CarteMembre getCarteMembre() {
+        return carteMembre;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setCarteMembre(CarteMembre carteMembre) {
+        this.carteMembre = carteMembre;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
 }

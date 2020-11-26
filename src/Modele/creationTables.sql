@@ -19,9 +19,9 @@ drop type tdvd;
 
 -- Personne (acteur, real, pro, ou autre)
 create type tpersonne as object (
-                                    nom varchar2(20),
-                                    prenom varchar2(20)
-                                );
+    nom varchar2(20),
+    prenom varchar2(20)
+);
 /
 
 create table LesPersonnesA of tpersonne;
@@ -43,6 +43,7 @@ create type tfilm as object (
                                 realisateur REF tpersonne,
                                 date_de_sortie date,
                                 acteurs tacteurs,
+                                ageLimite number(3),
                                 resume varchar2(200),
                                 affiche_url varchar2(20),
                                 genres tgenres
@@ -52,11 +53,11 @@ create type tfilm as object (
 -- Definition du type tdvd
 -- tdvd est un objet pointant sur l'objet physique (donc meme apres location il n'est pas retire de le base)
 create type tdvd as object (
-                               codeBarre number(12),
-                               film REF tfilm,
-                               estDispo number(1),
-                               estReserve number(1)
-                           );
+    codeBarre number(12),
+    film REF tfilm,
+    estDispo number(1),
+    estReserve number(1)
+);
 /
 
 -- Creation de la table LesDVDs
@@ -71,23 +72,23 @@ create table LeCatalogue of tfilm(
 
 -- CarteMembre : montant de la carte + date depuis quand cette derniere a montant < 0
 create type tcartemembreA as object (
-                                        montant number(5),
-                                        dateNeg date
-                                    );
+    montant number(5),
+    dateNeg date
+);
 /
 
 -- Definition du type client
 create type tclient as object (
     noCB varchar2(20)
-                              )
-    not final;
+)
+not final;
 /
 
 -- Definition du sous-type de client, membre
 create type tmembre under tclient (
-                                      carteMembre tcartemembreA,
-                                      membre tpersonne
-                                  );
+    carteMembre tcartemembreA,
+    membre tpersonne
+);
 /
 
 -- Creation de la table LesCLients
@@ -96,18 +97,19 @@ create table LesClientsA of tclient;
 
 -- Creation de la location
 create type tlocationA as object (
-                                     dvd REF tdvd,
-                                     dateLoc date,
-                                     dateRet date
-                                 );
+    dvd REF tdvd,
+    dateLoc date,
+    dateRet date
+);
 /
 
 -- Creation de la reservation
 create type treservation as object (
-                                       film REF tfilm,
-                                       dateRes date,
-                                       dvdRetire REF tdvd -- dvd en question
-                                   );
+    film REF tfilm,
+    dateRes date,
+    aRetire number(1), -- dvd reserve retire (1 -> le membre a retirer son dvd reserve)
+    dvdRetire REF tdvd -- dvd en question
+);
 /
 
 -- Definition d'une collection libre de references sur tlocation
@@ -123,18 +125,18 @@ create type ens_reservations as Table of treservation;
 -- Creation de la table LesLocations
 -- Associe un client a une location
 create table LesLocations (
-                              clientCB varchar2(20),
-                              liste_location ens_locations
+    client tclient,
+    liste_location ens_locations
 )
-    Nested table liste_location Store As ListeLocationsClient;
+Nested table liste_location Store As ListeLocationsClient;
 
 -- Creation de la table LesReservations
 -- Associe un client (membre) a une resvation
 create table LesReservations (
-                                 clientCB varchar2(20),-- Le client peut ne plus être membre un jour (donc on garde tout de meme une trace)
-                                 liste_reservation ens_reservations
+    client tmembre,-- Le client peut ne plus être membre un jour (donc on garde tout de meme une trace)
+    liste_reservation ens_reservations
 )
-    Nested table liste_reservation Store As ListeReservationsMembre;
+Nested table liste_reservation Store As ListeReservationsMembre;
 
 INSERT INTO LesPersonnesA values ('bob','dylan');
 INSERT INTO LesPersonnesA values ('georges','michael');
@@ -147,7 +149,7 @@ INSERT INTO LeCatalogue values
             where p.nom = 'georges'),(select REF(p) from LesPersonnesA p
                                       where p.nom = 'bon'),
  DATE '2001-08-10',tacteurs((select REF(p) from LesPersonnesA p
-                             where p.nom = 'steven')),'c est la merde','qgqgqrfhgqfhqhf',
+                             where p.nom = 'steven')),0,'c est la merde','qgqgqrfhgqfhqhf',
  tgenres('horror'));
 
 INSERT INTO LeCatalogue values
@@ -155,7 +157,7 @@ INSERT INTO LeCatalogue values
              where p.nom = 'bon'),(select REF(p) from LesPersonnesA p
                                    where p.nom = 'georges'),
  DATE '2001-08-10',tacteurs((select REF(p) from LesPersonnesA p
-                             where p.nom = 'bon')),'c est la merde','qgqgqrfhgqfhqhf',
+                             where p.nom = 'bon')),0,'c est la merde','qgqgqrfhgqfhqhf',
  tgenres('action', 'thriller'));
 
 INSERT INTO LeCatalogue values
@@ -163,7 +165,7 @@ INSERT INTO LeCatalogue values
              where p.nom = 'bob'),(select REF(p) from LesPersonnesA p
                                    where p.nom = 'J'),
  DATE '2001-08-10',tacteurs((select REF(p) from LesPersonnesA p
-                             where p.nom = 'georges')),'c est la merde','qgqgqrfhgqfhqhf',
+                             where p.nom = 'georges')),10,'c est la merde','qgqgqrfhgqfhqhf',
  tgenres('horror', 'romance'));
 
 INSERT INTO LeCatalogue values
@@ -172,7 +174,7 @@ INSERT INTO LeCatalogue values
                                    where p.nom = 'bon'),
  DATE '2001-08-10',tacteurs((select REF(p) from LesPersonnesA p
                              where p.nom = 'steven'),(select REF(p) from LesPersonnesA p
-                                                      where p.nom = 'J')),'c est la merde','qgqgqrfhgqfhqhf',
+                                                      where p.nom = 'J')),16,'c est la merde','qgqgqrfhgqfhqhf',
  tgenres('horror', 'romance'));
 
 INSERT INTO LesDVDs VALUES (1234,(select REF(f) from LeCatalogue f where f.titre = 'bonjour'),1,0);
@@ -198,10 +200,3 @@ INSERT INTO LesLocations VALUES (300, ens_locations(tlocationA((select REF(d) fr
 INSERT INTO LesLocations VALUES (45, ens_locations(tlocationA((select REF(d) from lesDvds d
                                                                where d.codeBarre = 1234),DATE '2001-08-17',null)));
 
-INSERT INTO LesReservations VALUES (300, ens_reservations(treservation((select REF(c) from LeCatalogue c
-                                                                        where c.titre = 'bonjour'),DATE '2001-08-10',null)));
-
-INSERT INTO LesReservations VALUES ('300', ens_reservations(treservation((select REF(c) from LeCatalogue c
-                                                                          where c.titre = 'bonjour2'),DATE '2001-08-30',null),
-                                                            treservation((select REF(c) from LeCatalogue c
-                                                                          where c.titre = 'bonjour5'),DATE '2003-08-30',null)));
