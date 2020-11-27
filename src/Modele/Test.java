@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class Test {
 
     public static void main(String[] argv) throws SQLException {
-        FilmDAO fDAO = new FilmDAO();
-        fDAO.read(0);
+        ReservationDAO fDAO = new ReservationDAO();
+        fDAO.readTouteLocation("300");
         fDAO.connection.close();
 
     }

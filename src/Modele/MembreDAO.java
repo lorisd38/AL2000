@@ -21,7 +21,7 @@ public class MembreDAO extends SqlDAO<Membre> {
             while(result.next()){
                 /*if(result.getObject(1) != null){
                     membre.setIdCarteMembre(result.getObject(1).getClass());
-                } else { membre.setIdCarteMembre("");}*/
+                } else { membre.setIdCarteMembre("");}
 
                 if(result.getObject(2) != null){
                     membre.setNom(result.getObject(2).toString());
@@ -33,7 +33,7 @@ public class MembreDAO extends SqlDAO<Membre> {
 
                 if(result.getObject(4) != null){
                     membre.setNoCB(result.getObject(4).toString());
-                } else { membre.setNoCB("");}
+                } else { membre.setNoCB("");}*/
             }
         } catch(SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -47,8 +47,8 @@ public class MembreDAO extends SqlDAO<Membre> {
         PreparedStatement preparedStmt;
         try {
             preparedStmt = connection.prepareStatement(query);
-            preparedStmt.setString (1, "tcartemembre(" + obj.getCarteMembre().getMontant() + ", " + obj.getCarteMembre().getDateNeg() + ")");
-            preparedStmt.setString (2, "tpersonne(" + obj.getNom() + ", " + obj.getPrenom() + ")");
+          //  preparedStmt.setString (1, "tcartemembre(" + obj.getCarteMembre().getMontant() + ", " + obj.getCarteMembre().getDateNeg() + ")");
+          //  preparedStmt.setString (2, "tpersonne(" + obj.getNom() + ", " + obj.getPrenom() + ")");
             preparedStmt.execute();
             return true;
         } catch (ClassNotFoundException e) {
