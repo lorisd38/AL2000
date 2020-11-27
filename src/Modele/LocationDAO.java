@@ -16,7 +16,7 @@ public class LocationDAO extends SqlDAO<Location> {
     }
 
     @Override
-    public Location read(int id) {
+    public Location read(Object o) throws SQLException {
         return null;
     }
 
@@ -25,7 +25,44 @@ public class LocationDAO extends SqlDAO<Location> {
         ArrayList<Location> locations = new ArrayList<Location>();
         Location loc;
         try{
-            ResultSet result = this.connection.createStatement().executeQuery("SELECT value(locs) FROM LesLocations l, TABLE(l.liste_location) locs WHERE l.clientCB =" + id);
+            String query = "SELECT value(locs) FROM LesLocations l, TABLE(l.liste_location) locs WHERE l.clientCB ='" + id + "'";
+            System.out.println(query);
+            ResultSet result = this.connection.createStatement().executeQuery(query);
+            while(result.next()){
+                loc = new Location();
+                loc.setIdClient(""+id);
+                System.out.println("test");
+
+                if(result.getObject("idDVD") != null){
+                    System.out.println(result.getObject("idDVD").toString());
+                    loc.setIdDVD(result.getObject("idDVD").toString());
+                } else { loc.setIdDVD("");}
+
+                if(result.getObject("dateLoc") != null){
+                    System.out.println(result.getDate("dateLoc"));
+                    loc.setDateLoc(result.getDate("dateLoc"));
+                } else { loc.setDateLoc(null);}
+
+                if(result.getObject("dateRet") != null){
+                    System.out.println(result.getDate("dateRet").toString());
+                    loc.setDateRen(result.getDate("dateRet"));
+                } else { loc.setDateRen(null);}
+
+                locations.add(loc);
+            }
+        } catch(SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return locations;
+    }
+
+    public ArrayList<Location> readLocationActive(String id){
+        System.out.println("Récupération des locations du client : " + id);
+        ArrayList<Location> locations = new ArrayList<Location>();
+        Location loc;
+        try{
+            ResultSet result = this.connection.createStatement().executeQuery(
+                    "SELECT value(locs) FROM LesLocations l, TABLE(l.liste_location) locs WHERE locs.dateRet IS NULL AND l.clientCB =" + id);
 
             while(result.next()){
                 loc = new Location();
@@ -53,6 +90,8 @@ public class LocationDAO extends SqlDAO<Location> {
         }
         return locations;
     }
+
+
 
     @Override
     public boolean create(Location obj) {

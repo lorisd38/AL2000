@@ -5,7 +5,8 @@ public class Membre extends Client{
     private String nom;
     private String prenom;
 
-    public Membre() {
+    public Membre(String noCB) {
+        super(noCB);
     }
 
     public CarteMembre getCarteMembre() {
