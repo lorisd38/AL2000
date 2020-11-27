@@ -6,6 +6,12 @@ public class Membre extends Client{
 
     public Membre(){}
 
+    public Membre(String noCB, CarteMembre carteMembre, Personne personne) {
+        super(noCB);
+        this.carteMembre = carteMembre;
+        this.personne = personne;
+    }
+
     public Membre(String noCB) {
         super(noCB);
     }

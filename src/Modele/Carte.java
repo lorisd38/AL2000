@@ -6,7 +6,15 @@ abstract class Carte {
 	protected int compteMontant;
 	protected int id;
 	protected Date dateNeg;
-	
+
+	public void setCompteMontant(int compteMontant) {
+		this.compteMontant = compteMontant;
+	}
+
+	public void setDateNeg(Date dateNeg) {
+		this.dateNeg = dateNeg;
+	}
+
 	public int getNumeroCarte() {
 		return id;
 	}

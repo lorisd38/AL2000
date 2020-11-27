@@ -24,96 +24,11 @@ public class FilmDAO extends SqlDAO<Film> {
     public Film read(Object titre) {
         Film film = new Film();
         try{
-            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre, producteur ,DEREF(realisateur) as rea, DEREF(acteursTab) as acts, TO_CHAR(date_de_sortie, 'YYYY-MM-DD') as date_sortie, resume, affiche_url, genres, ageLimite FROM (SELECT f.*, value(act) AS acteursTab from LeCatalogue f, table(f.acteurs) act) where titre = '" + titre.toString() + "'");
+            ResultSet result = this.connection.createStatement().executeQuery(
+                    "SELECT titre, producteur ,DEREF(realisateur) as rea, DEREF(value(act)) as acts, TO_CHAR(date_de_sortie, 'YYYY-MM-DD') as date_sortie, resume, affiche_url, genres, ageLimite FROM LeCatalogue f, table(f.acteurs) act where titre = '" + titre.toString() + "'");
 
             while(result.next()){
-                if(result.getObject("titre") != null){
-                    film.setNom(result.getObject("titre").toString());
-                } else {
-                    film.setNom("INCONNU");
-                }
-
-                if(result.getObject("producteur") != null){
-                    film.setProducteur(result.getObject("producteur").toString());
-                } else {
-                    film.setProducteur("INCONNU");
-                }
-
-                if(result.getObject("rea") != null){
-                    Object[] att;
-                    att = ((STRUCT) result.getObject(3)).getAttributes();
-                    Personne p = new Personne(att[0].toString(), att[1].toString());
-                    film.setRealisateur(p);
-                } else {
-                    film.setRealisateur(new Personne("INCONNU","INCONNU"));
-                }
-
-                if(result.getObject("acts") != null){
-                    Object[] att;
-                    att = ((STRUCT) result.getObject("acts")).getAttributes();
-                    ArrayList<Personne> acteurs = new ArrayList<Personne>();
-                    int i = 0;
-                    String nom = "";
-                    for (Object o : att) {
-                        if(i%2 == 0){
-                            nom = o.toString();
-                        } else {
-                            Personne p = new Personne(nom, o.toString());
-                            acteurs.add(p);
-                        }
-                        i++;
-                    }
-                    film.setActeurs(acteurs);
-                } else {
-                    ArrayList<Personne> acteurs = new ArrayList<Personne>();
-                    film.setActeurs(acteurs);
-                }
-
-                if(result.getDate("date_sortie") != null){
-                    film.setDateDeSortie(result.getDate("date_sortie"));
-                }
-
-                if(result.getObject("resume") != null){
-                    film.setResume(result.getObject("resume").toString());
-                } else {
-                    film.setResume("Pas de résumé");
-                }
-
-                if(result.getObject("affiche_url") != null){
-                    film.setAffiche(result.getObject("affiche_url").toString());
-                } else {
-                    film.setAffiche("Pas d'affiche");
-                }
-
-                if(result.getObject("genres") != null) {
-                    ARRAY att;
-                    att = ((ARRAY) result.getObject("genres"));
-                    String[] tab = (String[])att.getArray();
-                    ArrayList<Genre> genres = new ArrayList<Genre>();
-                    for (String s : tab) {
-                        switch(s){
-                            case "Action" :
-                                genres.add(Genre.Action);
-                                break;
-                            case "Thriller" :
-                                genres.add(Genre.Thriller);
-                                break;
-                            case "Documentaire" :
-                                genres.add(Genre.Documentaire);
-                            case "Fantastique" :
-                                genres.add(Genre.Fantastique);
-                            default:
-                                genres.add(Genre.Inconnu);
-                        }
-                    }
-                    film.setGenre(genres);
-                }
-
-                if(result.getObject("ageLimite") != null){
-                    film.setAgeLimite(Integer.valueOf(result.getObject("ageLimite").toString()));
-                } else {
-                    film.setAgeLimite(0);
-                }
+                film = resultToFilm(result);
 
             }
         } catch(SQLException | ClassNotFoundException e) {
@@ -122,12 +37,106 @@ public class FilmDAO extends SqlDAO<Film> {
         return film;
     }
 
+    public Film resultToFilm(ResultSet result) throws SQLException {
+        Film film = new Film();
+        if(result.getObject("titre") != null){
+            film.setNom(result.getObject("titre").toString());
+        } else {
+            film.setNom("INCONNU");
+        }
+
+        if(result.getObject("producteur") != null){
+            film.setProducteur(result.getObject("producteur").toString());
+        } else {
+            film.setProducteur("INCONNU");
+        }
+
+        if(result.getObject("rea") != null){
+            Object[] att;
+            att = ((STRUCT) result.getObject(3)).getAttributes();
+            Personne p = new Personne(att[0].toString(), att[1].toString());
+            film.setRealisateur(p);
+        } else {
+            film.setRealisateur(new Personne("INCONNU","INCONNU"));
+        }
+
+        if(result.getObject("acts") != null){
+            Object[] att;
+            att = ((STRUCT) result.getObject("acts")).getAttributes();
+            ArrayList<Personne> acteurs = new ArrayList<Personne>();
+            int i = 0;
+            String nom = "";
+            for (Object o : att) {
+                if(i%2 == 0){
+                    nom = o.toString();
+                } else {
+                    Personne p = new Personne(nom, o.toString());
+                    acteurs.add(p);
+                }
+                i++;
+            }
+            film.setActeurs(acteurs);
+        } else {
+            ArrayList<Personne> acteurs = new ArrayList<Personne>();
+            film.setActeurs(acteurs);
+        }
+
+        if(result.getDate("date_sortie") != null){
+            film.setDateDeSortie(result.getDate("date_sortie"));
+        }
+
+        if(result.getObject("resume") != null){
+            film.setResume(result.getObject("resume").toString());
+        } else {
+            film.setResume("Pas de résumé");
+        }
+
+        if(result.getObject("affiche_url") != null){
+            film.setAffiche(result.getObject("affiche_url").toString());
+        } else {
+            film.setAffiche("Pas d'affiche");
+        }
+
+        if(result.getObject("genres") != null) {
+            ARRAY att;
+            att = ((ARRAY) result.getObject("genres"));
+            String[] tab = (String[])att.getArray();
+            ArrayList<Genre> genres = new ArrayList<Genre>();
+            for (String s : tab) {
+                switch(s){
+                    case "Action" :
+                        genres.add(Genre.Action);
+                        break;
+                    case "Thriller" :
+                        genres.add(Genre.Thriller);
+                        break;
+                    case "Documentaire" :
+                        genres.add(Genre.Documentaire);
+                    case "Fantastique" :
+                        genres.add(Genre.Fantastique);
+                    default:
+                        genres.add(Genre.Inconnu);
+                }
+            }
+            film.setGenre(genres);
+        }
+
+        if(result.getObject("ageLimite") != null){
+            film.setAgeLimite(Integer.valueOf(result.getObject("ageLimite").toString()));
+        } else {
+            film.setAgeLimite(0);
+        }
+        return film;
+    }
+
     public ArrayList<Film> readAllFilm(){
         ArrayList<Film> films = new ArrayList<Film>();
         try {
-            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre FROM LeCatalogue");
-            while (result.next()) {
-                films.add(read(result.getObject("titre")));
+            ResultSet result = this.connection.createStatement().executeQuery(
+                    "SELECT titre, producteur ,DEREF(realisateur) as rea, DEREF(value(act)) as acts, TO_CHAR(date_de_sortie, 'YYYY-MM-DD') as date_sortie, resume, affiche_url, genres, ageLimite FROM LeCatalogue f, table(f.acteurs) act");
+            while(result.next()){
+                films.add(resultToFilm(result)) ;
+                result.next();
             }
         } catch(SQLException | ClassNotFoundException e) {
             e.printStackTrace();

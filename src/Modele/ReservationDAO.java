@@ -20,10 +20,6 @@ public class ReservationDAO extends SqlDAO<Reservation>{
         return null;
     }
 
-    public Reservation read(int id) {
-        return null;
-    }
-
     @Override
     public boolean create(Reservation obj) {
         return false;
@@ -90,7 +86,7 @@ public class ReservationDAO extends SqlDAO<Reservation>{
     public boolean dvdDemandeReservation(int codeBarre){
         try{
             ResultSet result = this.connection.createStatement().executeQuery(
-                    "SELECT dateRes FROM LesReservationsA WHERE DEREF(film).titre = (select DEREF(d.film).titre from lesDvdsA d where d.codeBarre = "+ codeBarre + ")");
+                    "SELECT dateRes FROM LesReservationsA WHERE dvdRetire IS NULL AND DEREF(film).titre = (select DEREF(d.film).titre from lesDvdsA d where d.codeBarre = "+ codeBarre + ")");
             while(result.next()){
                 return true;
             }
@@ -103,7 +99,7 @@ public class ReservationDAO extends SqlDAO<Reservation>{
     public boolean updateRes(int codeBarre){
         try{
             ResultSet result = this.connection.createStatement().executeQuery(
-                    "UPDATE LesReservationsA a SET dvdRetire = (select REF(d) from lesDvdsA d where d.codeBarre = " + codeBarre + ") WHERE ROWNUM <=1 AND DEREF(film).titre = (select DEREF(d.film).titre from lesDvdsA d where d.codeBarre = "+ codeBarre + ")");
+                    "UPDATE LesReservationsA a SET dvdRetire = (select REF(d) from lesDvdsA d where d.codeBarre = " + codeBarre + ") WHERE ROWNUM <=1 AND dvdRetire IS NULL AND  DEREF(film).titre = (select DEREF(d.film).titre from lesDvdsA d where d.codeBarre = "+ codeBarre + ")");
             return true;
         } catch(SQLException | ClassNotFoundException e) {
             e.printStackTrace();

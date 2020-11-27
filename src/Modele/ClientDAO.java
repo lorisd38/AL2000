@@ -12,7 +12,7 @@ public class ClientDAO extends SqlDAO<Client> {
     public Client read(Object noC) {
         Client client = new Client();
         try{
-            ResultSet result = this.connection.createStatement().executeQuery("SELECT noCB FROM LesClientsA WHERE noCB = '" + noC + "'");
+            ResultSet result = this.connection.createStatement().executeQuery("SELECT noCB FROM LesClientsAL WHERE noCB = '" + noC + "'");
 
             while(result.next()){
                 if(result.getObject("noCB") != null){
@@ -31,7 +31,7 @@ public class ClientDAO extends SqlDAO<Client> {
     @Override
     public boolean create(Client obj) {
         try {
-            String query = "insert into LesClientsA values (";
+            String query = "insert into LesClientsAL values (";
             query += "tclient(" + obj.getNoCB() + "))";
             PreparedStatement preparedStmt;
             preparedStmt = connection.prepareStatement(query);
@@ -53,7 +53,7 @@ public class ClientDAO extends SqlDAO<Client> {
     @Override
     public boolean delete(Client obj) {
         int nbMaJ = 0;
-        String requete = "DELETE FROM LesClientsA WHERE noCB = '" + obj.getNoCB() + "'";
+        String requete = "DELETE FROM LesClientsAL WHERE noCB = '" + obj.getNoCB() + "'";
         try {
             // Execution de la requete
             PreparedStatement preparedStatement = this.connection.prepareStatement(requete);

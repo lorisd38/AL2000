@@ -1,9 +1,18 @@
 package Modele;
 
+import java.util.Date;
+
 public class CarteMembre extends Carte {
 	private final int montantMinimalCarte = 15;
 	Membre proprietaire;
-	
+
+	public int getMontantMinimalCarte() {
+		return montantMinimalCarte;
+	}
+
+	public CarteMembre() {
+	}
+
 	public CarteMembre(int numeroMembre, Membre proprietaire) {
 		id = numeroMembre;
 		compteMontant = 0;

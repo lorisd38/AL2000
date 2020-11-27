@@ -96,7 +96,7 @@ create type tmembre under tclient (
 
 -- Creation de la table LesCLients
 -- Peut recevoir du type tclient ou tmembre
-create table LesClientsAL of tclient;
+create table LesClientsAL of tclient(UNIQUE(noCB));
 
 -- Creation de la table LesLocations
 -- Associe un client a une location

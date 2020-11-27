@@ -10,13 +10,11 @@ public class Test {
     public static void main(String[] argv) throws SQLException {
         ArrayList<Reservation> locs = new ArrayList<Reservation>();
         locs.add(new Reservation("65", "Cendrillon", new Date(), 0));
-        locs.add(new Reservation("65", "Avatar", new Date(), 0));
         ReservationDAO fDAO = new ReservationDAO();
         try {
-            //fDAO.create(locs, new Client("65"));
-            fDAO.delete(1215);
+            fDAO.create(locs, new Client("65"));
             fDAO.readTouteLocation("65");
-            System.out.println(fDAO.dvdDemandeReservation(300345));
+            System.out.println(fDAO.dvdDemandeReservation(1205));
             System.out.println("Closing connections...");
             fDAO.connection.close();
         }catch (Exception e){
