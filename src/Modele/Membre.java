@@ -2,8 +2,9 @@ package Modele;
 
 public class Membre extends Client{
     private CarteMembre carteMembre;
-    private String nom;
-    private String prenom;
+    private Personne personne;
+
+    public Membre(){}
 
     public Membre(String noCB) {
         super(noCB);
@@ -13,23 +14,15 @@ public class Membre extends Client{
         return carteMembre;
     }
 
-    public String getNom() {
-        return nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
+    public Personne getPersonne() {
+        return personne;
     }
 
     public void setCarteMembre(CarteMembre carteMembre) {
         this.carteMembre = carteMembre;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setPersonne(Personne personne) {
+        this.personne = personne;
     }
 }

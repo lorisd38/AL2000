@@ -3,7 +3,6 @@ package Modele;
 import oracle.sql.ARRAY;
 import oracle.sql.STRUCT;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
@@ -43,7 +43,6 @@ public class FilmDAO extends SqlDAO<Film> {
                     Object[] att;
                     att = ((STRUCT) result.getObject(3)).getAttributes();
                     Personne p = new Personne(att[0].toString(), att[1].toString());
-                    System.out.println(p.getNom() + " " + p.getPrenom());
                     film.setRealisateur(p);
                 } else {
                     film.setRealisateur(new Personne("INCONNU","INCONNU"));
@@ -111,7 +110,6 @@ public class FilmDAO extends SqlDAO<Film> {
                 }
 
                 if(result.getObject("ageLimite") != null){
-                    System.out.println(result.getObject("ageLimite").toString());
                     film.setAgeLimite(Integer.valueOf(result.getObject("ageLimite").toString()));
                 } else {
                     film.setAgeLimite(0);
