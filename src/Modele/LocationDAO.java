@@ -37,6 +37,25 @@ public class LocationDAO extends SqlDAO<Location> {
         return locations;
     }
 
+    public ArrayList<String> readLocationOrdered(){
+        System.out.println("Récupération des locations du client : ");
+        ArrayList<String> str = new ArrayList<String>();
+        try{
+            ResultSet result = this.connection.createStatement().executeQuery(
+                    "SELECT  DEREF(DEREF(dvd).film).titre as titre, count(DEREF(DEREF(dvd).film).titre) as nb FROM LesLocationsA GROUP BY DEREF(DEREF(dvd).film).titre ORDER BY nb DESC");
+
+            while(result.next()){
+                if(result.getObject("titre") != null){
+                    System.out.println(result.getObject("titre").toString());
+                    str.add(result.getObject("titre").toString());
+                }
+            }
+        } catch(SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
 
 
     public ArrayList<Location> readLocationActive(String id){
