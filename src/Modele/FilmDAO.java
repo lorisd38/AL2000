@@ -23,7 +23,7 @@ public class FilmDAO extends SqlDAO<Film> {
     public Film read(Object titre) {
         Film film = new Film();
         try{
-            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre, producteur ,DEREF(realisateur) as rea, DEREF(acteursTab) as acts, date_de_sortie, resume, affiche_url, genres, ageLimite FROM (SELECT f.*, value(act) AS acteursTab from LeCatalogue f, table(f.acteurs) act) where titre = '" + titre.toString() + "'");
+            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre, producteur ,DEREF(realisateur) as rea, DEREF(acteursTab) as acts, TO_CHAR(date_de_sortie, 'YYYY-MM-DD'), resume, affiche_url, genres, ageLimite FROM (SELECT f.*, value(act) AS acteursTab from LeCatalogue f, table(f.acteurs) act) where titre = '" + titre.toString() + "'");
 
             while(result.next()){
                 if(result.getObject("titre") != null){
@@ -63,6 +63,9 @@ public class FilmDAO extends SqlDAO<Film> {
                         i++;
                     }
                     film.setActeurs(acteurs);
+                } else {
+                    ArrayList<Personne> acteurs = new ArrayList<Personne>();
+                    film.setActeurs(acteurs);
                 }
 
                 if(result.getObject("date_de_sortie") != null){
@@ -97,6 +100,8 @@ public class FilmDAO extends SqlDAO<Film> {
                                 break;
                             case "Documentaire" :
                                 genres.add(Genre.Documentaire);
+                            case "Fantastique" :
+                                genres.add(Genre.Fantastique);
                         }
                     }
                     film.setGenre(genres);
