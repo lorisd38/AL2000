@@ -40,3 +40,34 @@ INSERT INTO LeCatalogue values
  14, 'Dans un futur proche, les États-Unis ont développé ce qui est appelé le « rêve partagé », une méthode permettant d influencer l inconscient d une victime pendant qu elle rêve, donc à partir de son subconscient. Des « extracteurs » s immiscent alors dans ce rêve, qu ils ont préalablement modelé et qu ils peuvent contrôler, afin d y voler des informations sensibles stockées dans le subconscient de la cible. C est dans cette nouvelle technique que se sont lancés Dominic Cobb et sa femme, Mal. Ensemble, ils ont exploré les possibilités de cette technique et l ont améliorée, leur permettant d emboîter les rêves les uns dans les autres, accentuant la confusion et donc diminuant la méfiance de la victime. Mais l implication du couple dans ce projet a été telle que Mal a un jour perdu le sens de la réalité ; pensant être en train de rêver, elle s est suicidée, croyant ainsi revenir à sa vision de la réalité. Soupçonné de son meurtre, Cobb est contraint de fuir les États-Unis et d abandonner leurs enfants à ses beaux-parents. Il se spécialise dans l « extraction », en particulier dans le domaine de l espionnage industriel ; mercenaire et voleur, il est embauché par des multinationales pour obtenir des informations de leurs concurrents commerciaux.',
  'https://img-4.linternaute.com/hjM5dgLFPajbUWUmTVDwLHOqt3c=/1240x/19547719906f480d80a7c0a77d93f6be/ccmcms-linternaute/127232.jpg',
  tgenres('Thriller'));
+
+INSERT INTO LesDVDs VALUES (1201,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDs VALUES (1202,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDs VALUES (1203,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDs VALUES (1204,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDs VALUES (1205,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDs VALUES (1206,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDs VALUES (1207,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+
+INSERT INTO LesDVDs VALUES (1211,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
+INSERT INTO LesDVDs VALUES (1212,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
+INSERT INTO LesDVDs VALUES (1213,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
+INSERT INTO LesDVDs VALUES (1214,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
+INSERT INTO LesDVDs VALUES (1215,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
+
+INSERT INTO LesDVDs VALUES (1221,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDs VALUES (1222,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDs VALUES (1223,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDs VALUES (1224,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDs VALUES (1225,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDs VALUES (1226,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDs VALUES (1227,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDs VALUES (1228,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+
+INSERT INTO LesDVDs VALUES (1231,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDs VALUES (1232,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDs VALUES (1233,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDs VALUES (1234,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDs VALUES (1235,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDs VALUES (1236,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDs VALUES (1237,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);

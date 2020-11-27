@@ -1,5 +1,6 @@
 package Modele;
 
+import oracle.sql.ARRAY;
 import oracle.sql.STRUCT;
 
 import java.sql.Date;
@@ -23,7 +24,7 @@ public class FilmDAO extends SqlDAO<Film> {
     public Film read(Object titre) {
         Film film = new Film();
         try{
-            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre, producteur ,DEREF(realisateur) as rea, DEREF(acteursTab) as acts, TO_CHAR(date_de_sortie, 'YYYY-MM-DD'), resume, affiche_url, genres, ageLimite FROM (SELECT f.*, value(act) AS acteursTab from LeCatalogue f, table(f.acteurs) act) where titre = '" + titre.toString() + "'");
+            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre, producteur ,DEREF(realisateur) as rea, DEREF(acteursTab) as acts, TO_CHAR(date_de_sortie, 'YYYY-MM-DD') as date_sortie, resume, affiche_url, genres, ageLimite FROM (SELECT f.*, value(act) AS acteursTab from LeCatalogue f, table(f.acteurs) act) where titre = '" + titre.toString() + "'");
 
             while(result.next()){
                 if(result.getObject("titre") != null){
@@ -42,6 +43,7 @@ public class FilmDAO extends SqlDAO<Film> {
                     Object[] att;
                     att = ((STRUCT) result.getObject(3)).getAttributes();
                     Personne p = new Personne(att[0].toString(), att[1].toString());
+                    System.out.println(p.getNom() + " " + p.getPrenom());
                     film.setRealisateur(p);
                 } else {
                     film.setRealisateur(new Personne("INCONNU","INCONNU"));
@@ -68,10 +70,10 @@ public class FilmDAO extends SqlDAO<Film> {
                     film.setActeurs(acteurs);
                 }
 
-                if(result.getObject("date_de_sortie") != null){
-                    DateFormat format = new SimpleDateFormat("DD-MM-YYYY", Locale.FRANCE);
-                    Date date = (Date) format.parse(result.getObject("date_de_sortie").toString());
-                    film.setDateDeSortie(date);
+                if(result.getDate("date_sortie") != null){
+                    //DateFormat format = new SimpleDateFormat("YYYY-MM-DD", Locale.FRANCE);
+                    //Date date = (Date) format.parse(result.getObject("date_sortie").toString());
+                    film.setDateDeSortie(result.getDate("date_sortie"));
                 }
 
                 if(result.getObject("resume") != null){
@@ -87,11 +89,12 @@ public class FilmDAO extends SqlDAO<Film> {
                 }
 
                 if(result.getObject("genres") != null) {
-                    Object[] att;
-                    att = ((STRUCT) result.getObject("genres")).getAttributes();
+                    ARRAY att;
+                    att = ((ARRAY) result.getObject("genres"));
+                    String[] tab = (String[])att.getArray();
                     ArrayList<Genre> genres = new ArrayList<Genre>();
-                    for (Object o : att) {
-                        switch(o.toString()){
+                    for (String s : tab) {
+                        switch(s){
                             case "Action" :
                                 genres.add(Genre.Action);
                                 break;
@@ -102,19 +105,22 @@ public class FilmDAO extends SqlDAO<Film> {
                                 genres.add(Genre.Documentaire);
                             case "Fantastique" :
                                 genres.add(Genre.Fantastique);
+                            default:
+                                genres.add(Genre.Inconnu);
                         }
                     }
                     film.setGenre(genres);
                 }
 
                 if(result.getObject("ageLimite") != null){
-                    film.setAgeLimite((int)result.getObject("ageLimite"));
+                    System.out.println(result.getObject("ageLimite").toString());
+                    film.setAgeLimite(Integer.valueOf(result.getObject("ageLimite").toString()));
                 } else {
                     film.setAgeLimite(0);
                 }
 
             }
-        } catch(SQLException | ClassNotFoundException | ParseException e) {
+        } catch(SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return film;
@@ -135,17 +141,15 @@ public class FilmDAO extends SqlDAO<Film> {
 
     @Override
     public boolean create(Film obj) {
-        String query = "INSERT INTO LeCatalogue values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement preparedStmt;
         try {
-            preparedStmt = connection.prepareStatement(query);
-            preparedStmt.setString (1, obj.getNom());
-            preparedStmt.setString(2, obj.getProducteur());
-            preparedStmt.setString (3, "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getRealisateur().getNom() + "')");
-            String pattern = "DD-MM-YYYY";
+            String query = "INSERT INTO LeCatalogue values (";
+            query += "'" + obj.getNom() + "', ";
+            query += "'" + obj.getProducteur() + "', ";
+            query += "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getRealisateur().getNom() + "'), ";
+            String pattern = "yyyy-MM-dd";
             DateFormat df = new SimpleDateFormat(pattern);
-            String dateSortie = df.format(obj.getDateDeSortie());
-            preparedStmt.setString (4, dateSortie);
+            query += "DATE '" + df.format(obj.getDateDeSortie()) + "', ";
             String acteurs = "";
             for(int i = 0 ; i < obj.getActeurs().size(); i++){
                 if(i < obj.getActeurs().size()-1) {
@@ -154,19 +158,21 @@ public class FilmDAO extends SqlDAO<Film> {
                     acteurs += "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getActeurs().get(i).getNom() + "')";
                 }
             }
-            preparedStmt.setString (5, "tacteurs(" + acteurs + ")");
-            preparedStmt.setString (6, Integer.toString(obj.getAgeLimite()));
-            preparedStmt.setString (7, obj.getResume());
-            preparedStmt.setString (8, obj.getAffiche());
+            query += "tacteurs(" + acteurs + "), ";
+            query += Integer.toString(obj.getAgeLimite()) + ", ";
+            query += "'" + obj.getResume() + "', ";
+            query += "'" + obj.getAffiche() + "', ";
             String genres = "";
             for(int i = 0 ; i < obj.getGenre().size(); i++){
                 if(i < obj.getGenre().size()-1) {
-                    acteurs += "'" + obj.getGenre().get(i) + "', ";
+                    genres += "'" + obj.getGenre().get(i) + "', ";
                 } else {
-                    acteurs += "'" + obj.getGenre().get(i) + "'";
+                    genres += "'" + obj.getGenre().get(i) + "'";
                 }
             }
-            preparedStmt.setString (9, "tgenres(" + genres + ")");
+            query += "tgenres(" + genres + "))";
+            System.out.println(query);
+            preparedStmt = connection.prepareStatement(query);
             preparedStmt.execute();
             return true;
         } catch (ClassNotFoundException e) {

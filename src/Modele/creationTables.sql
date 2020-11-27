@@ -45,7 +45,7 @@ create type tfilm as object (
     acteurs tacteurs,
     ageLimite number(3),
     resume varchar2(200),
-    affiche_url varchar2(20),
+    affiche_url varchar2(200),
     genres tgenres
 );
 /
