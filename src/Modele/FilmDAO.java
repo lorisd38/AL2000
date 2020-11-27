@@ -23,22 +23,19 @@ public class FilmDAO extends SqlDAO<Film> {
     public Film read(Object titre) {
         Film film = new Film();
         try{
-            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre, DEREF(producteur) as prod ,DEREF(realisateur) as rea, DEREF(acteursTab) as acts, date_de_sortie, resume, affiche_url, genres, ageLimite FROM (SELECT f.*, value(act) AS acteursTab from LeCatalogue f, table(f.acteurs) act) where titre = '" + titre.toString() + "'");
+            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre, producteur ,DEREF(realisateur) as rea, DEREF(acteursTab) as acts, date_de_sortie, resume, affiche_url, genres, ageLimite FROM (SELECT f.*, value(act) AS acteursTab from LeCatalogue f, table(f.acteurs) act) where titre = '" + titre.toString() + "'");
 
             while(result.next()){
-                if(result.getObject(1) != null){
-                    film.setNom(result.getObject(1).toString());
+                if(result.getObject("titre") != null){
+                    film.setNom(result.getObject("titre").toString());
                 } else {
                     film.setNom("INCONNU");
                 }
 
-                if(result.getObject("prod") != null){
-                    Object[] att;
-                    att = ((STRUCT) result.getObject(2)).getAttributes();
-                    Personne p = new Personne(att[0].toString(), att[1].toString());
-                    film.setProducteur(p);
+                if(result.getObject("producteur") != null){
+                    film.setProducteur(result.getObject("producteur").toString());
                 } else {
-                    film.setProducteur(new Personne("INCONNU","INCONNU"));
+                    film.setProducteur("INCONNU");
                 }
 
                 if(result.getObject("rea") != null){
@@ -125,7 +122,7 @@ public class FilmDAO extends SqlDAO<Film> {
         try {
             preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString (1, obj.getNom());
-            preparedStmt.setString(2, "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getProducteur().getNom() + "')");
+            preparedStmt.setString(2, obj.getProducteur());
             preparedStmt.setString (3, "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getRealisateur().getNom() + "')");
             String pattern = "DD-MM-YYYY";
             DateFormat df = new SimpleDateFormat(pattern);
