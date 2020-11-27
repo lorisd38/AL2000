@@ -115,6 +115,19 @@ public class FilmDAO extends SqlDAO<Film> {
         return film;
     }
 
+    public ArrayList<Film> readAllFilm(){
+        ArrayList<Film> films = new ArrayList<Film>();
+        try {
+            ResultSet result = this.connection.createStatement().executeQuery("SELECT titre FROM LeCatalogue");
+            while (result.next()) {
+                films.add(read(result.getObject("titre")));
+            }
+        } catch(SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return films;
+    }
+
     @Override
     public boolean create(Film obj) {
         String query = "INSERT INTO LeCatalogue values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
