@@ -10,6 +10,7 @@ public class DvdDAO extends SqlDAO<DVD> {
     public DvdDAO() throws SQLException {
     }
 
+    //Recuperation des valeurs d'un DVD depuis son codeBarre
     @Override
     public DVD read(Object codebarre) throws SQLException{
         DVD dvd = new DVD();
@@ -43,6 +44,7 @@ public class DvdDAO extends SqlDAO<DVD> {
         return dvd;
     }
 
+    //Creation d'un nouveau dvd
     @Override
     public boolean create(DVD obj) {
         PreparedStatement preparedStmt;
@@ -64,6 +66,8 @@ public class DvdDAO extends SqlDAO<DVD> {
         return false;
     }
 
+
+    // Update des valeurs des booleens de DVD
     @Override
     public boolean update(DVD obj) {
         String query = " update LesDVDsA set estDispo = ?, estReserve = ? where codeBarre = "
@@ -84,11 +88,12 @@ public class DvdDAO extends SqlDAO<DVD> {
         return false;
     }
 
+    //Recuperation de tout les films possedant au moins 1 DVD dans la machine sous forme de liste des titres
     public ArrayList<String> filmDispoLoc() throws SQLException {
         ArrayList<String> lesTitres = new ArrayList<String>();
         try{
             System.out.println("Reading dvd dispo " );
-            ResultSet result = this.connection.createStatement().executeQuery("Select DEREF(film).titre as titre FROM LesDVDsA where estDispo = 1 AND estReserve = 0");
+            ResultSet result = this.connection.createStatement().executeQuery("Select DEREF(film).titre as titre FROM LesDVDsA where estDispo = 1 AND estReserve = 0 GROUP BY DEREF(film).titre");
 
             while(result.next()) {
                 if(result.getObject("titre") != null){

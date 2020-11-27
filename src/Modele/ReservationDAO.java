@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -34,7 +35,7 @@ public class ReservationDAO extends SqlDAO<Reservation>{
         Reservation res;
         try{
             ResultSet result = this.connection.createStatement().executeQuery(
-                    "SELECT DEREF(film).titre as titre, dateRes , DEREF(dvdRetire).codeBarre as idDvd FROM LesReservations WHERE clientCB = '" + id + "'");
+                    "SELECT DEREF(film).titre as titre, dateRes , DEREF(dvdRetire).codeBarre as idDvd FROM LesReservationsA WHERE clientCB = '" + id + "'");
 
             while(result.next()){
                 res = new Reservation();
@@ -51,9 +52,9 @@ public class ReservationDAO extends SqlDAO<Reservation>{
                 } else { res.setDateRes(null);}
 
                 if(result.getObject("idDvd") != null){
-                    System.out.println(result.getDate("idDvd"));
-                    res.setIdDvd(result.getObject("idDvd").toString());
-                } else { res.setIdDvd(null);}
+                    System.out.println(result.getObject("idDvd"));
+                    res.setIdDvd(Integer.valueOf(result.getObject("idDvd").toString()));
+                } else { res.setIdDvd(0);}
 
                 reservation.add(res);
             }
@@ -63,27 +64,20 @@ public class ReservationDAO extends SqlDAO<Reservation>{
         return reservation;
     }
 
-    public boolean create(ArrayList<Reservation> locations, Client cli) {
+    public boolean create(ArrayList<Reservation> reservation, Client cli) {
+        if(reservation.isEmpty()) return true;
 
-        String query = "INSERT INTO LesReservations values ("+ cli.getNoCB()+"', ";
+        String start = "INSERT INTO LesReservationsA values ('"+ reservation.get(0).getIdClient()+"', ";
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String end = "DATE '" + date + "', null)";
         PreparedStatement preparedStmt;
         try {
-            String pattern = "YYYY-MM-DD";
-            DateFormat df = new SimpleDateFormat(pattern);
-            String date = df.format(LocalDateTime.now());
-
-            preparedStmt = connection.prepareStatement(query);
-            preparedStmt.setString (1,cli.getNoCB());
             String locStr = "ens_reservations(";
-            for (Iterator<Reservation> i = locations.iterator(); i.hasNext(); ) {
-                locStr += "treservation((select REF(c) from LeCatalogue c where c.titre = '" + i.next().getTitre() + "'),";
-                locStr += "DATE '" + date + "', null), ";
+            for (Iterator<Reservation> i = reservation.iterator(); i.hasNext(); ) {
+                System.out.println(start + "(select REF(c) from LeCatalogue c where c.titre = '" + i.next().getTitre() + "'),"+ end);
+                preparedStmt = connection.prepareStatement(start + "(select REF(c) from LeCatalogue c where c.titre = '" + i.next().getTitre() + "'),"+ end);
+                preparedStmt.execute();
             }
-            locStr = locStr.substring(0, locStr.length()-2);
-            locStr += ")";
-            preparedStmt.setString (2, locStr);
-            System.out.println(preparedStmt.toString());
-            preparedStmt.execute();
             return true;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -96,7 +90,7 @@ public class ReservationDAO extends SqlDAO<Reservation>{
     public boolean dvdDemandeReservation(int codeBarre){
         try{
             ResultSet result = this.connection.createStatement().executeQuery(
-                    "Select res.dateRes FROM LISTERESERVATIONSMEMBRE res, (Select DEREF(film) as film from LesDvds where codeBarre =" + codeBarre +")f where f.film.titre = DEREF(res.film).titre AND res.dvdRetire IS NULL");
+                    "SELECT dateRes FROM LesReservationsA WHERE DEREF(film).titre = (select DEREF(d.film).titre from lesDvdsA d where d.codeBarre = "+ codeBarre + ")");
             while(result.next()){
                 return true;
             }
@@ -106,21 +100,38 @@ public class ReservationDAO extends SqlDAO<Reservation>{
         return false;
     }
 
-    @Override
-    public boolean update(Reservation obj) {
-        //SELECT dateRes FROM LISTERESERVATIONSMEMBRE WHERE ROWNUM <=1 ORDER BY dateRes DESC;
-        //WHERE ROWNUM <=1 AND DEREF(film).titre = t.titre
-
-        //Select res FROM LISTERESERVATIONSMEMBRE res, (Select DEREF(film) as film from LesDvds where codeBarre = 1234)f where f.film.titre = DEREF(res.film).titre AND res.dvdRetire IS NULL;
-
-        //SELECT value(locs) FROM LesLocations l, TABLE(l.liste_location) locs WHERE locs.dateRet IS NULL AND l.clientCB =45;
-
-        //UPDATE LISTERESERVATIONSMEMBRE res SET res.dvdRetire = (select REF(d) from lesDvds d where d.codeBarre = 1234) WHERE DEREF(res.film).titre = 'bonjour' AND res.dvdRetire IS NULL ORDER BY dateRes DESC;
+    public boolean updateRes(int codeBarre){
+        try{
+            ResultSet result = this.connection.createStatement().executeQuery(
+                    "UPDATE LesReservationsA a SET dvdRetire = (select REF(d) from lesDvdsA d where d.codeBarre = " + codeBarre + ") WHERE ROWNUM <=1 AND DEREF(film).titre = (select DEREF(d.film).titre from lesDvdsA d where d.codeBarre = "+ codeBarre + ")");
+            return true;
+        } catch(SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
-    public boolean delete(String idDvd) {
+    @Override
+    public boolean update(Reservation obj) {
+        return false;
+    }
 
+    public boolean delete(int codeBarre) {
+
+        String query = "DELETE FROM LesReservationsA WHERE DEREF(dvdRetire).codeBarre = " + codeBarre;
+        PreparedStatement preparedStmt;
+        try {
+            System.out.println(query);
+            preparedStmt = connection.prepareStatement(query);
+
+            System.out.println(preparedStmt.toString());
+            preparedStmt.execute();
+            return true;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 

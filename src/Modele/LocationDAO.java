@@ -21,6 +21,7 @@ public class LocationDAO extends SqlDAO<Location> {
         return null;
     }
 
+
     public ArrayList<Location> readTouteLocation(String id){
         System.out.println("Récupération des locations du client : " + id);
         ArrayList<Location> locations = new ArrayList<Location>();
@@ -88,6 +89,7 @@ public class LocationDAO extends SqlDAO<Location> {
         return false;
     }
 
+    //Creation de nouvelles locations
     public boolean create(ArrayList<Location> locations, Client cli) {
 
         PreparedStatement preparedStmt;
@@ -111,8 +113,8 @@ public class LocationDAO extends SqlDAO<Location> {
         return false;
     }
 
+    //Fonction a utiliser quand un dvd est rendu, complete la date de Retour de la Location active sur le DVD représenté par codeBarre
     public boolean update(int codeBarre) {
-        //Select locs FROM LesLocations l, TABLE(l.liste_location) locs where l.clientCB = '45';
 
         String query = "update LesLocationsA set dateRet = DATE '";
         PreparedStatement preparedStmt;

@@ -8,15 +8,15 @@ import java.util.Date;
 public class Test {
 
     public static void main(String[] argv) throws SQLException {
-        ArrayList<Location> locs = new ArrayList<Location>();
-        locs.add(new Location("45", 1227, new Date(), null));
-
-        LocationDAO fDAO = new LocationDAO();
+        ArrayList<Reservation> locs = new ArrayList<Reservation>();
+        locs.add(new Reservation("65", "Cendrillon", new Date(), 0));
+        locs.add(new Reservation("65", "Avatar", new Date(), 0));
+        ReservationDAO fDAO = new ReservationDAO();
         try {
-            //fDAO.create(locs, new Client("45"));
-            fDAO.update(1205);
-            fDAO.readLocationActive("65");
+            //fDAO.create(locs, new Client("65"));
+            fDAO.delete(1215);
             fDAO.readTouteLocation("65");
+            System.out.println(fDAO.dvdDemandeReservation(300345));
             System.out.println("Closing connections...");
             fDAO.connection.close();
         }catch (Exception e){

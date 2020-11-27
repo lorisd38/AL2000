@@ -6,9 +6,16 @@ public class Reservation {
     private String idClient;
     private String titre;
     private Date dateRes;
-    private String idDvd;
+    private int idDvd;
 
-    public String getIdDvd() {
+    public Reservation(String idClient, String titre, Date dateRes, int idDvd) {
+        this.idClient = idClient;
+        this.titre = titre;
+        this.dateRes = dateRes;
+        this.idDvd = idDvd;
+    }
+
+    public int getIdDvd() {
         return idDvd;
     }
 
@@ -20,7 +27,7 @@ public class Reservation {
         this.dateRes = dateLoc;
     }
 
-    public void setIdDvd(String idDvd) {
+    public void setIdDvd(int idDvd) {
         this.idDvd = idDvd;
     }
 

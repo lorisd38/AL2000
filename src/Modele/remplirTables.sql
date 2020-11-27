@@ -77,7 +77,7 @@ INSERT INTO LesClientsAL VALUES (tclient(45));
 INSERT INTO LesClientsAL VALUES (tclient(35));
 INSERT INTO LesClientsAL VALUES (tmembre(60,tcartemembreA(500, null), tpersonne('Nowak','Axel')));
 INSERT INTO LesClientsAL VALUES (tmembre(65,tcartemembreA(100, null), tpersonne('Him','Clemence')));
-INSERT INTO LesClientsAL VALUES (tmembre(65,tcartemembreA(-10,DATE '2020-08-10'), tpersonne('Eponge','Bob')));
+INSERT INTO LesClientsAL VALUES (tmembre(70,tcartemembreA(-10,DATE '2020-08-10'), tpersonne('Eponge','Bob')));
 
 INSERT INTO LesLocationsA VALUES (45, (select REF(d) from lesDvdsA d where d.codeBarre = 1221),DATE '2001-08-13',DATE '2001-08-15');
 INSERT INTO LesLocationsA VALUES (45, (select REF(d) from lesDvdsA d where d.codeBarre = 1234),DATE '2001-08-15',DATE '2001-08-18');
