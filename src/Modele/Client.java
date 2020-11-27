@@ -3,9 +3,7 @@ package Modele;
 public class Client {
     private String noCB;
 
-    public void setNoCB(String noCB) {
-        this.noCB = noCB;
-    }
+    public Client(){}
 
 	public Client(String noCB) {
 		this.noCB = noCB;
@@ -13,5 +11,9 @@ public class Client {
 
 	public String getNoCB() {
 		return noCB;
+	}
+
+	public void setNoCB(String noCB) {
+		this.noCB = noCB;
 	}
 }
