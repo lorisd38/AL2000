@@ -19,19 +19,27 @@ public class TestDVD {
         Film f = new Film("avatir", "Disney",new Personne("comeron", "james"),"bonjour", acts ,new Date(),"ezfqzef",0,null,genres);
 
         FilmDAO sDAO = new FilmDAO();
-        //sDAO.create(f);
-        System.out.println(sDAO.read("avatir").toString());
-        System.out.println("NBacteurs :"+sDAO.read("avatir").getActeurs().size());
-        sDAO.connection.close();
-
-
-        DVD dvd = new DVD(3028, f, true,false);
         DvdDAO fDAO = new DvdDAO();
-        //fDAO.create(dvd);
-        dvd.setEstDispo(false);
-        dvd.setEstReservable(true);
-        fDAO.update(dvd);
-        fDAO.read(3028);
-        fDAO.connection.close();
+        //sDAO.create(f);
+        try {
+            System.out.println(sDAO.read("avatir").toString());
+            System.out.println("NBacteurs :"+sDAO.read("avatir").getActeurs().size());
+            sDAO.connection.close();
+
+
+            DVD dvd = new DVD(3028, f, true,false);
+            //fDAO.create(dvd);
+            dvd.setEstDispo(false);
+            dvd.setEstReservable(true);
+            fDAO.update(dvd);
+            fDAO.read(3028);
+            System.out.println("Closing connections...");
+            fDAO.connection.close();
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+            System.out.println("Closing connections...");
+            sDAO.connection.close();
+            fDAO.connection.close();
+        }
     }
 }

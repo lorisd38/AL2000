@@ -34,7 +34,7 @@ public class ReservationDAO extends SqlDAO<Reservation>{
         Reservation res;
         try{
             ResultSet result = this.connection.createStatement().executeQuery(
-                    "SELECT DEREF(value(locs).film).titre as titre, value(locs).dateRes as dateRes, DEREF(value(locs).dvdRetire).codeBarre as idDvd FROM LesReservations l, TABLE(l.liste_reservation) locs WHERE clientCB = '" + id + "'");
+                    "SELECT DEREF(film).titre as titre, dateRes , DEREF(dvdRetire).codeBarre as idDvd FROM LesReservations WHERE clientCB = '" + id + "'");
 
             while(result.next()){
                 res = new Reservation();
@@ -65,7 +65,7 @@ public class ReservationDAO extends SqlDAO<Reservation>{
 
     public boolean create(ArrayList<Reservation> locations, Client cli) {
 
-        String query = "INSERT INTO LesReservations values (?, ?)";
+        String query = "INSERT INTO LesReservations values ("+ cli.getNoCB()+"', ";
         PreparedStatement preparedStmt;
         try {
             String pattern = "YYYY-MM-DD";

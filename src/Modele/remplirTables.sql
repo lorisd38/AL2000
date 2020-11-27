@@ -72,12 +72,12 @@ INSERT INTO LesDVDsA VALUES (1235,(select REF(f) from LeCatalogue f where f.titr
 INSERT INTO LesDVDsA VALUES (1236,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
 INSERT INTO LesDVDsA VALUES (1237,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,1);
 
-INSERT INTO LesClientsA VALUES (tclient(55));
-INSERT INTO LesClientsA VALUES (tclient(45));
-INSERT INTO LesClientsA VALUES (tclient(35));
-INSERT INTO LesClientsA VALUES (tmembre(60,tcartemembreA(500, null), tpersonne('Nowak','Axel')));
-INSERT INTO LesClientsA VALUES (tmembre(65,tcartemembreA(100, null), tpersonne('Him','Clemence')));
-INSERT INTO LesClientsA VALUES (tmembre(65,tcartemembreA(-10,DATE '2020-08-10'), tpersonne('Eponge','Bob')));
+INSERT INTO LesClientsAL VALUES (tclient(55));
+INSERT INTO LesClientsAL VALUES (tclient(45));
+INSERT INTO LesClientsAL VALUES (tclient(35));
+INSERT INTO LesClientsAL VALUES (tmembre(60,tcartemembreA(500, null), tpersonne('Nowak','Axel')));
+INSERT INTO LesClientsAL VALUES (tmembre(65,tcartemembreA(100, null), tpersonne('Him','Clemence')));
+INSERT INTO LesClientsAL VALUES (tmembre(65,tcartemembreA(-10,DATE '2020-08-10'), tpersonne('Eponge','Bob')));
 
 INSERT INTO LesLocationsA VALUES (45, (select REF(d) from lesDvdsA d where d.codeBarre = 1221),DATE '2001-08-13',DATE '2001-08-15');
 INSERT INTO LesLocationsA VALUES (45, (select REF(d) from lesDvdsA d where d.codeBarre = 1234),DATE '2001-08-15',DATE '2001-08-18');
@@ -96,3 +96,5 @@ INSERT INTO LesLocationsA VALUES (65, (select REF(d) from lesDvdsA d where d.cod
 INSERT INTO LesReservationsA VALUES (60, (select REF(f) from LeCatalogue f where f.titre = 'Inception'),DATE '2001-08-10',(select REF(d) from lesDvdsA d where d.codeBarre = 1237));
 
 INSERT INTO LesReservationsA VALUES (65, (select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),DATE '2001-08-13',null);
+
+COMMIT;

@@ -5,6 +5,7 @@ drop table LesReservations FORCE;
 drop table LesDVDsA FORCE;
 drop table LeCatalogue FORCE;
 drop table LesClientsA FORCE;
+drop table LesClientsAL FORCE;
 drop table LesPersonnesA FORCE;
 drop type ens_locations FORCE;
 drop type ens_reservations FORCE;
@@ -95,7 +96,7 @@ create type tmembre under tclient (
 
 -- Creation de la table LesCLients
 -- Peut recevoir du type tclient ou tmembre
-create table LesClientsA of tclient;
+create table LesClientsAL of tclient;
 
 -- Creation de la table LesLocations
 -- Associe un client a une location
