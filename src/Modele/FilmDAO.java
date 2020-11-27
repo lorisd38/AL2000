@@ -188,6 +188,8 @@ public class FilmDAO extends SqlDAO<Film> {
         return false;
     }
 
+    //Select DEREF(film) FROM LesDvds where estDispo = 1;
+
     @Override
     public boolean delete(Film obj) {
         int nbMaJ = 0;

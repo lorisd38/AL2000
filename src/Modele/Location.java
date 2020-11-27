@@ -3,9 +3,15 @@ package Modele;
 import java.util.Date;
 
 public class Location {
+    public Location(String idClient, int idDVD, Date dateLoc, Date dateRen) {
+        this.idClient = idClient;
+        this.idDVD = idDVD;
+        this.dateLoc = dateLoc;
+        this.dateRen = dateRen;
+    }
 
     private String idClient;
-    private String idDVD;
+    private int idDVD;
     private Date dateLoc;
     private Date dateRen;
 
@@ -16,7 +22,7 @@ public class Location {
         return idClient;
     }
 
-    public String getIdDVD() {
+    public int getIdDVD() {
         return idDVD;
     }
 
@@ -32,7 +38,7 @@ public class Location {
         this.idClient = idClient;
     }
 
-    public void setIdDVD(String idDVD) {
+    public void setIdDVD(int idDVD) {
         this.idDVD = idDVD;
     }
 
