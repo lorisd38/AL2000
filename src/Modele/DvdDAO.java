@@ -1,6 +1,7 @@
 package Modele;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DvdDAO extends SqlDAO<DVD> {
@@ -9,8 +10,34 @@ public class DvdDAO extends SqlDAO<DVD> {
     }
 
     @Override
-    public DVD read(Object titre) {
-        return null;
+    public DVD read(Object codebarre) throws SQLException{
+        DVD dvd = new DVD();
+        FilmDAO fDAO = new FilmDAO();
+        try{
+            ResultSet result = this.connection.createStatement().executeQuery("SELECT codeBarre, DEREF(film).titre as titre, estDispo, estReserve from LesDVDs where codeBarre = " + codebarre.toString());
+
+            while(result.next()){
+
+                if(result.getObject("codeBarre") != null){
+                    dvd.setCodeBarre((int) result.getObject("codeBarre"));
+                } else { dvd.setCodeBarre(0);}
+
+                if(result.getObject("titre") != null){
+                    dvd.setFilm(fDAO.read(result.getObject("titre")));
+                }
+
+                if(result.getObject("estDispo") != null){
+                    dvd.setEstDispo(((int) result.getObject("estDispo")) == 1 ? true : false );
+                } else { dvd.setEstDispo(false);}
+
+                if(result.getObject("estReserve") != null){
+                    dvd.setEstReservable(((int) result.getObject("estReserve")) == 1 ? true : false );
+                } else { dvd.setEstReservable(false);}
+            }
+        } catch(SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return dvd;
     }
 
     @Override

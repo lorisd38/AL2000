@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Film {
     private String nom = "Inconnu";
-    private Personne producteur;
+    private String producteur;
     private Personne realisateur;
     private String resume = "Inconnu";
     private ArrayList<Personne> acteurs;
@@ -20,7 +20,7 @@ public class Film {
 
     }
 
-    public Film(String nom, Personne producteur, Personne realisateur, String resume, ArrayList<Personne> acteurs, Date dateDeSortie, String affiche, int ageLimite, Support support, ArrayList<Genre> genre) {
+    public Film(String nom, String producteur, Personne realisateur, String resume, ArrayList<Personne> acteurs, Date dateDeSortie, String affiche, int ageLimite, Support support, ArrayList<Genre> genre) {
         this.nom = nom;
         this.producteur = producteur;
         this.realisateur = realisateur;
@@ -37,7 +37,7 @@ public class Film {
         return nom;
     }
 
-    public Personne getProducteur() {
+    public String getProducteur() {
         return producteur;
     }
 
@@ -77,7 +77,7 @@ public class Film {
         this.nom = nom;
     }
 
-    public void setProducteur(Personne producteur) {
+    public void setProducteur(String producteur) {
         this.producteur = producteur;
     }
 

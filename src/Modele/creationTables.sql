@@ -39,7 +39,7 @@ create type tgenres as Varray(10) of varchar2(20);
 -- Film
 create type tfilm as object (
     titre varchar2(20),
-    producteur REF tpersonne,
+    producteur varchar2(20),
     realisateur REF tpersonne,
     date_de_sortie varchar2(20),
     acteurs tacteurs,

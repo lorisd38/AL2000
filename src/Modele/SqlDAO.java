@@ -9,7 +9,7 @@ public abstract class SqlDAO<T> {
         connection = Connexion.getInstance();
     }
 
-    public abstract T read(Object o);
+    public abstract T read(Object o) throws SQLException;
 
     public abstract boolean create(T obj);
 
