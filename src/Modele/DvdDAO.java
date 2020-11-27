@@ -16,7 +16,7 @@ public class DvdDAO extends SqlDAO<DVD> {
         FilmDAO fDAO = new FilmDAO();
         try{
             System.out.println("Reading dvd: " + codebarre.toString());
-            ResultSet result = this.connection.createStatement().executeQuery("SELECT codeBarre, DEREF(film).titre as titre, estDispo, estReserve from LesDVDs where codeBarre = " + codebarre.toString());
+            ResultSet result = this.connection.createStatement().executeQuery("SELECT codeBarre, DEREF(film).titre as titre, estDispo, estReserve from LesDVDsA where codeBarre = " + codebarre.toString());
 
             while(result.next()){
 
@@ -46,7 +46,7 @@ public class DvdDAO extends SqlDAO<DVD> {
     @Override
     public boolean create(DVD obj) {
         PreparedStatement preparedStmt;
-        String query = "insert into LesDVDs values (";
+        String query = "insert into LesDVDsA values (";
         try {
             query += obj.getCodeBarre() + ", ";
             query += "(select REF(c) from LeCatalogue c where c.titre = '" + obj.getFilm().getNom() + "'), ";
@@ -66,7 +66,7 @@ public class DvdDAO extends SqlDAO<DVD> {
 
     @Override
     public boolean update(DVD obj) {
-        String query = " update LesDVDs set estDispo = ?, estReserve = ? where codeBarre = "
+        String query = " update LesDVDsA set estDispo = ?, estReserve = ? where codeBarre = "
                         + obj.getCodeBarre() + "";
 
         PreparedStatement preparedStmt;
@@ -88,7 +88,7 @@ public class DvdDAO extends SqlDAO<DVD> {
         ArrayList<String> lesTitres = new ArrayList<String>();
         try{
             System.out.println("Reading dvd dispo " );
-            ResultSet result = this.connection.createStatement().executeQuery("Select DEREF(film).titre as titre FROM LesDVDs where estDispo = 1 AND estReserve = 0");
+            ResultSet result = this.connection.createStatement().executeQuery("Select DEREF(film).titre as titre FROM LesDVDsA where estDispo = 1 AND estReserve = 0");
 
             while(result.next()) {
                 if(result.getObject("titre") != null){

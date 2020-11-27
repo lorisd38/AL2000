@@ -71,8 +71,6 @@ public class FilmDAO extends SqlDAO<Film> {
                 }
 
                 if(result.getDate("date_sortie") != null){
-                    //DateFormat format = new SimpleDateFormat("YYYY-MM-DD", Locale.FRANCE);
-                    //Date date = (Date) format.parse(result.getObject("date_sortie").toString());
                     film.setDateDeSortie(result.getDate("date_sortie"));
                 }
 
@@ -146,16 +144,16 @@ public class FilmDAO extends SqlDAO<Film> {
             String query = "INSERT INTO LeCatalogue values (";
             query += "'" + obj.getNom() + "', ";
             query += "'" + obj.getProducteur() + "', ";
-            query += "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getRealisateur().getNom() + "'), ";
+            query += "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getRealisateur().getNom() + "' AND p.prenom = '" + obj.getRealisateur().getPrenom() +"'), ";
             String pattern = "yyyy-MM-dd";
             DateFormat df = new SimpleDateFormat(pattern);
             query += "DATE '" + df.format(obj.getDateDeSortie()) + "', ";
             String acteurs = "";
             for(int i = 0 ; i < obj.getActeurs().size(); i++){
                 if(i < obj.getActeurs().size()-1) {
-                    acteurs += "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getActeurs().get(i).getNom() + "'), ";
+                    acteurs += "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getActeurs().get(i).getNom() + "' AND p.prenom = '" + obj.getActeurs().get(i).getPrenom() +"'), ";
                 } else {
-                    acteurs += "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getActeurs().get(i).getNom() + "')";
+                    acteurs += "(select REF(p) from LesPersonnesA p where p.nom = '" + obj.getActeurs().get(i).getNom() + "' AND p.prenom = '" + obj.getActeurs().get(i).getPrenom() +"')";
                 }
             }
             query += "tacteurs(" + acteurs + "), ";
@@ -187,8 +185,6 @@ public class FilmDAO extends SqlDAO<Film> {
     public boolean update(Film obj) {
         return false;
     }
-
-    //Select DEREF(film) FROM LesDvds where estDispo = 1;
 
     @Override
     public boolean delete(Film obj) {

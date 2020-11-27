@@ -16,6 +16,19 @@ public class Film {
     private Support support;
     private ArrayList<Genre> genre;
 
+    @Override
+    public String toString() {
+        return "Film{" +
+                "nom='" + nom + '\'' +
+                ", producteur='" + producteur + '\'' +
+                ", realisateur=" + realisateur +
+                ", resume='" + resume + '\'' +
+                ", dateDeSortie=" + dateDeSortie +
+                ", affiche='" + affiche + '\'' +
+                ", ageLimite=" + ageLimite +
+                '}';
+    }
+
     public Film(){
 
     }

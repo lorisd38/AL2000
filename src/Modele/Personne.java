@@ -21,6 +21,14 @@ public class Personne {
         this.nom = nom;
     }
 
+    @Override
+    public String toString() {
+        return "Personne{" +
+                "nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                '}';
+    }
+
     public void setPrenom(String prenom) {
         this.prenom = prenom;
     }

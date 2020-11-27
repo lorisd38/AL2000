@@ -41,33 +41,58 @@ INSERT INTO LeCatalogue values
  'https://img-4.linternaute.com/hjM5dgLFPajbUWUmTVDwLHOqt3c=/1240x/19547719906f480d80a7c0a77d93f6be/ccmcms-linternaute/127232.jpg',
  tgenres('Thriller'));
 
-INSERT INTO LesDVDs VALUES (1201,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
-INSERT INTO LesDVDs VALUES (1202,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
-INSERT INTO LesDVDs VALUES (1203,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
-INSERT INTO LesDVDs VALUES (1204,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
-INSERT INTO LesDVDs VALUES (1205,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
-INSERT INTO LesDVDs VALUES (1206,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
-INSERT INTO LesDVDs VALUES (1207,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDsA VALUES (1201,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDsA VALUES (1202,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDsA VALUES (1203,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDsA VALUES (1204,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDsA VALUES (1205,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDsA VALUES (1206,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
+INSERT INTO LesDVDsA VALUES (1207,(select REF(f) from LeCatalogue f where f.titre = 'Avatar'),1,0);
 
-INSERT INTO LesDVDs VALUES (1211,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
-INSERT INTO LesDVDs VALUES (1212,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
-INSERT INTO LesDVDs VALUES (1213,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
-INSERT INTO LesDVDs VALUES (1214,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
-INSERT INTO LesDVDs VALUES (1215,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
+INSERT INTO LesDVDsA VALUES (1211,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
+INSERT INTO LesDVDsA VALUES (1212,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
+INSERT INTO LesDVDsA VALUES (1213,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
+INSERT INTO LesDVDsA VALUES (1214,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
+INSERT INTO LesDVDsA VALUES (1215,(select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),1,0);
 
-INSERT INTO LesDVDs VALUES (1221,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
-INSERT INTO LesDVDs VALUES (1222,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
-INSERT INTO LesDVDs VALUES (1223,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
-INSERT INTO LesDVDs VALUES (1224,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
-INSERT INTO LesDVDs VALUES (1225,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
-INSERT INTO LesDVDs VALUES (1226,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
-INSERT INTO LesDVDs VALUES (1227,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
-INSERT INTO LesDVDs VALUES (1228,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDsA VALUES (1221,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDsA VALUES (1222,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDsA VALUES (1223,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDsA VALUES (1224,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDsA VALUES (1225,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDsA VALUES (1226,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDsA VALUES (1227,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
+INSERT INTO LesDVDsA VALUES (1228,(select REF(f) from LeCatalogue f where f.titre = 'Derrière nos écrans de fumée'),1,0);
 
-INSERT INTO LesDVDs VALUES (1231,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
-INSERT INTO LesDVDs VALUES (1232,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
-INSERT INTO LesDVDs VALUES (1233,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
-INSERT INTO LesDVDs VALUES (1234,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
-INSERT INTO LesDVDs VALUES (1235,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
-INSERT INTO LesDVDs VALUES (1236,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
-INSERT INTO LesDVDs VALUES (1237,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDsA VALUES (1231,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDsA VALUES (1232,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDsA VALUES (1233,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDsA VALUES (1234,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDsA VALUES (1235,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDsA VALUES (1236,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,0);
+INSERT INTO LesDVDsA VALUES (1237,(select REF(f) from LeCatalogue f where f.titre = 'Inception'),1,1);
+
+INSERT INTO LesClientsA VALUES (tclient(55));
+INSERT INTO LesClientsA VALUES (tclient(45));
+INSERT INTO LesClientsA VALUES (tclient(35));
+INSERT INTO LesClientsA VALUES (tmembre(60,tcartemembreA(500, null), tpersonne('Nowak','Axel')));
+INSERT INTO LesClientsA VALUES (tmembre(65,tcartemembreA(100, null), tpersonne('Him','Clemence')));
+INSERT INTO LesClientsA VALUES (tmembre(65,tcartemembreA(-10,DATE '2020-08-10'), tpersonne('Eponge','Bob')));
+
+INSERT INTO LesLocationsA VALUES (45, (select REF(d) from lesDvdsA d where d.codeBarre = 1221),DATE '2001-08-13',DATE '2001-08-15');
+INSERT INTO LesLocationsA VALUES (45, (select REF(d) from lesDvdsA d where d.codeBarre = 1234),DATE '2001-08-15',DATE '2001-08-18');
+INSERT INTO LesLocationsA VALUES (45, (select REF(d) from lesDvdsA d where d.codeBarre = 1212),DATE '2001-08-18',null);
+
+INSERT INTO LesLocationsA VALUES (55, (select REF(d) from lesDvdsA d where d.codeBarre = 1222),DATE '2001-08-15',DATE '2001-08-30');
+INSERT INTO LesLocationsA VALUES (55, (select REF(d) from lesDvdsA d where d.codeBarre = 1213),DATE '2001-08-30',DATE '2001-09-05');
+INSERT INTO LesLocationsA VALUES (55, (select REF(d) from lesDvdsA d where d.codeBarre = 1235),DATE '2001-10-15',null);
+
+INSERT INTO LesLocationsA VALUES (60, (select REF(d) from lesDvdsA d where d.codeBarre = 1235),DATE '2001-08-13',null);
+INSERT INTO LesLocationsA VALUES (60, (select REF(d) from lesDvdsA d where d.codeBarre = 1222),DATE '2001-08-13',null);
+
+INSERT INTO LesLocationsA VALUES (65, (select REF(d) from lesDvdsA d where d.codeBarre = 1205),DATE '2001-08-10',null);
+
+
+INSERT INTO LesReservationsA VALUES (60, (select REF(f) from LeCatalogue f where f.titre = 'Inception'),DATE '2001-08-10',(select REF(d) from lesDvdsA d where d.codeBarre = 1237));
+
+INSERT INTO LesReservationsA VALUES (65, (select REF(f) from LeCatalogue f where f.titre = 'Cendrillon'),DATE '2001-08-13',null);

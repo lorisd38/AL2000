@@ -26,7 +26,7 @@ public class LocationDAO extends SqlDAO<Location> {
         ArrayList<Location> locations = new ArrayList<Location>();
         Location loc;
         try{
-            String query = "SELECT DEREF(locs.dvd).codeBarre as dvd, locs.dateLoc as dateL, locs.dateRet as dateR  FROM LesLocations l, TABLE(l.liste_location) locs WHERE l.clientCB ='" + id + "'";
+            String query = "SELECT DEREF(dvd).codeBarre as dvd, dateLoc as dateL, dateRet as dateR  FROM LesLocationsA WHERE clientCB ='" + id + "'";
             System.out.println(query);
             ResultSet result = this.connection.createStatement().executeQuery(query);
             while(result.next()){
@@ -63,15 +63,15 @@ public class LocationDAO extends SqlDAO<Location> {
         Location loc;
         try{
             ResultSet result = this.connection.createStatement().executeQuery(
-                    "SELECT DEREF(locs.dvd).codeBarre as idDVD, locs.dateLoc, locs.dateRet  FROM LesLocations l, TABLE(l.liste_location) locs WHERE locs.dateRet IS NULL AND l.clientCB =" + id);
+                    "SELECT DEREF(dvd).codeBarre as dvd, dateLoc as dateL, dateRet as dateR  FROM LesLocationsA WHERE dateRet IS NULL AND clientCB =" + id);
 
             while(result.next()){
                 loc = new Location();
                 loc.setIdClient(""+id);
 
-                if(result.getObject("DVD") != null){
-                    System.out.println(result.getObject("DVD").toString());
-                    loc.setIdDVD(Integer.valueOf( result.getObject("DVD").toString()));
+                if(result.getObject("idDVD") != null){
+                    System.out.println(result.getObject("idDVD").toString());
+                    loc.setIdDVD(Integer.valueOf( result.getObject("idDVD").toString()));
                 } else { loc.setIdDVD(-1);}
 
                 if(result.getObject("dateLoc") != null){
@@ -107,18 +107,17 @@ public class LocationDAO extends SqlDAO<Location> {
     public boolean create(ArrayList<Location> locations, Client cli) {
 
         PreparedStatement preparedStmt;
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String start = "INSERT INTO LesLocationsA values ('" + cli.getNoCB()+"', ";
+        String end = "DATE '" + date + "', null)";
         try {
-            String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String locStr = "INSERT INTO LesLocations values ('" + cli.getNoCB()+"', ens_locations(";
+
             for (Iterator<Location> i = locations.iterator(); i.hasNext(); ) {
-                locStr += "tlocationA((select REF(d) from lesDvds d where d.codeBarre = " + i.next().getIdDVD() + "),";
-                locStr += "DATE '" + date + "', null), ";
+                System.out.println(start + "(select REF(d) from lesDvds d where d.codeBarre = " + i.next().getIdDVD() + "),"+ end);
+                preparedStmt = connection.prepareStatement(start + "(select REF(d) from lesDvds d where d.codeBarre = " + i.next().getIdDVD() + "),"+ end);
+                preparedStmt.execute();
             }
-            locStr = locStr.substring(0, locStr.length()-2);
-            locStr += "))";
-            preparedStmt = connection.prepareStatement(locStr);
-            System.out.println(locStr);
-            preparedStmt.execute();
+
             return true;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -128,19 +127,17 @@ public class LocationDAO extends SqlDAO<Location> {
         return false;
     }
 
-    public boolean update(String codeBarre) {
-        String query = "UPDATE LISTELOCATIONSCLIENT set dateRet = DATE '?' where DEREF(dvd).codeBarre = ? and dateRet IS NULL;";
+    public boolean update(int codeBarre) {
+        //Select locs FROM LesLocations l, TABLE(l.liste_location) locs where l.clientCB = '45';
+
+        String query = "update LesLocationsA set dateRet = DATE '";
         PreparedStatement preparedStmt;
         try {
-            String pattern = "YYYY-MM-DD";
-            DateFormat df = new SimpleDateFormat(pattern);
-            String date = df.format(LocalDateTime.now());
+            query +=  LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) +"' where dateRet IS NULL and DEREF(dvd).codeBarre = ";
+            query += codeBarre ;
 
+            System.out.println(query);
             preparedStmt = connection.prepareStatement(query);
-            preparedStmt.setString (1,date);
-            preparedStmt.setString (2, codeBarre);
-
-            //traiter retour dvd
 
             System.out.println(preparedStmt.toString());
             preparedStmt.execute();
