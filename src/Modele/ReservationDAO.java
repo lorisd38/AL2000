@@ -15,6 +15,10 @@ public class ReservationDAO extends SqlDAO<Reservation>{
     }
 
     @Override
+    public Reservation read(Object o) throws SQLException {
+        return null;
+    }
+
     public Reservation read(int id) {
         return null;
     }
@@ -89,13 +93,34 @@ public class ReservationDAO extends SqlDAO<Reservation>{
         return false;
     }
 
+    public boolean dvdDemandeReservation(int codeBarre){
+        try{
+            ResultSet result = this.connection.createStatement().executeQuery(
+                    "Select res.dateRes FROM LISTERESERVATIONSMEMBRE res, (Select DEREF(film) as film from LesDvds where codeBarre =" + codeBarre +")f where f.film.titre = DEREF(res.film).titre AND res.dvdRetire IS NULL");
+            while(result.next()){
+                return true;
+            }
+        } catch(SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public boolean update(Reservation obj) {
         //SELECT dateRes FROM LISTERESERVATIONSMEMBRE WHERE ROWNUM <=1 ORDER BY dateRes DESC;
+        //WHERE ROWNUM <=1 AND DEREF(film).titre = t.titre
+
+        //Select res FROM LISTERESERVATIONSMEMBRE res, (Select DEREF(film) as film from LesDvds where codeBarre = 1234)f where f.film.titre = DEREF(res.film).titre AND res.dvdRetire IS NULL;
+
+        //SELECT value(locs) FROM LesLocations l, TABLE(l.liste_location) locs WHERE locs.dateRet IS NULL AND l.clientCB =45;
+
+        //UPDATE LISTERESERVATIONSMEMBRE res SET res.dvdRetire = (select REF(d) from lesDvds d where d.codeBarre = 1234) WHERE DEREF(res.film).titre = 'bonjour' AND res.dvdRetire IS NULL ORDER BY dateRes DESC;
         return false;
     }
 
     public boolean delete(String idDvd) {
+
         return false;
     }
 

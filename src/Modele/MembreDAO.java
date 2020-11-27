@@ -13,8 +13,12 @@ public class MembreDAO extends SqlDAO<Membre> {
     }
 
     @Override
+    public Membre read(Object o) throws SQLException {
+        return null;
+    }
+
     public Membre read(int id) {
-        Membre membre = new Membre();
+        Membre membre = new Membre("" + id);
         try{
             ResultSet result = this.connection.createStatement().executeQuery("SELECT idCarteMembre, t.nom, t.prenom, noCB FROM lesmembres m, TABLE(m.titulaire) t WHERE numero = " + id);
 

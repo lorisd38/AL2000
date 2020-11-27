@@ -3,17 +3,13 @@ package Modele;
 import java.util.Date;
 
 public class Location {
-    private String id;
+
     private String idClient;
     private String idDVD;
     private Date dateLoc;
     private Date dateRen;
 
     public Location() {
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getIdClient() {
@@ -30,10 +26,6 @@ public class Location {
 
     public Date getDateRen() {
         return dateRen;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public void setIdClient(String idClient) {
