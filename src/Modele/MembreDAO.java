@@ -4,6 +4,8 @@ import java.lang.reflect.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -14,30 +16,17 @@ public class MembreDAO extends SqlDAO<Membre> {
 
     @Override
     public Membre read(Object o) throws SQLException {
-        return null;
-    }
-
-    public Membre read(int id) {
-        Membre membre = new Membre("" + id);
+        Membre membre = new Membre();
         try{
-            ResultSet result = this.connection.createStatement().executeQuery("SELECT idCarteMembre, t.nom, t.prenom, noCB FROM lesmembres m, TABLE(m.titulaire) t WHERE numero = " + id);
+            ResultSet result = this.connection.createStatement().executeQuery("SELECT TREAT(VALUE(m) AS tmembre) FROM LesClientsAL m WHERE VALUE(m) IS OF (tmembre);");
 
             while(result.next()){
-                /*if(result.getObject(1) != null){
-                    membre.setIdCarteMembre(result.getObject(1).getClass());
-                } else { membre.setIdCarteMembre("");}
-
-                if(result.getObject(2) != null){
-                    membre.setNom(result.getObject(2).toString());
-                } else { membre.setNom("");}
-
-                if(result.getObject(3) != null){
-                    membre.setPrenom(result.getObject(3).toString());
-                } else { membre.setPrenom("");}
-
-                if(result.getObject(4) != null){
-                    membre.setNoCB(result.getObject(4).toString());
-                } else { membre.setNoCB("");}*/
+                if(result.getObject("noCB") != null){
+                    System.out.println(result.getObject("noCB").toString());
+                    membre.setNoCB(result.getObject("noCB").toString());
+                } else {
+                    membre = null;
+                }
             }
         } catch(SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -47,12 +36,15 @@ public class MembreDAO extends SqlDAO<Membre> {
 
     @Override
     public boolean create(Membre obj) {
-        String query = " insert into LesClientsA values (?, ?)";
-        PreparedStatement preparedStmt;
         try {
+            String query = "insert into LesClientsA values (tmembre(";
+            query += "tcartemembreA(" + obj.getCarteMembre().getMontant() + ", ";
+            String pattern = "yyyy-MM-dd";
+            DateFormat df = new SimpleDateFormat(pattern);
+            query += "DATE '" + df.format(obj.getCarteMembre().getDateNeg()) + "'), ";
+            query += "tpersonne('" + obj.getPersonne().getNom() + "', '" + obj.getPersonne().getPrenom() + "')))";
+            PreparedStatement preparedStmt;
             preparedStmt = connection.prepareStatement(query);
-          //  preparedStmt.setString (1, "tcartemembre(" + obj.getCarteMembre().getMontant() + ", " + obj.getCarteMembre().getDateNeg() + ")");
-          //  preparedStmt.setString (2, "tpersonne(" + obj.getNom() + ", " + obj.getPrenom() + ")");
             preparedStmt.execute();
             return true;
         } catch (ClassNotFoundException e) {
