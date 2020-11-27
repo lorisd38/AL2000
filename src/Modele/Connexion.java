@@ -4,8 +4,8 @@ import java.sql.*;
 
 public class Connexion {
     private final static String URL = "jdbc:oracle:thin:@im2ag-oracle.e.ujf-grenoble.fr:1521:im2ag";
-    private final static String USER = "himc";
-    private final static String PASSWD = "Clapclap31";
+    private final static String USER = "nowakax";
+    private final static String PASSWD = "347U7n2i4";
     private static Connection connect;
 
     private Connexion() throws SQLException {

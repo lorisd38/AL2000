@@ -6,6 +6,22 @@ public class DVD {
     private boolean estDispo;
     private boolean estReservable;
 
+    public DVD(int codeBarre, Film film, boolean estDispo, boolean estReservable) {
+        this.codeBarre = codeBarre;
+        this.film = film;
+        this.estDispo = estDispo;
+        this.estReservable = estReservable;
+    }
+
+    @Override
+    public String toString() {
+        return "DVD{" +
+                "codeBarre=" + codeBarre +
+                ", estDispo=" + estDispo +
+                ", estReservable=" + estReservable +
+                '}';
+    }
+
     public DVD() {
     }
 
